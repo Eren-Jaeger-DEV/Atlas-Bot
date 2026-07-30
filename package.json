@@ -1,0 +1,29 @@
+{
+  "name": "atlas-discord-bot",
+  "version": "1.0.0",
+  "description": "Official Discord Community Bot for Atlas Studio IDE",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "register": "tsx src/registerCommands.ts"
+  },
+  "keywords": [
+    "atlas-studio",
+    "discord-bot",
+    "discordjs",
+    "typescript"
+  ],
+  "author": "Eren Jaeger DEV",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3"
+  }
+}
