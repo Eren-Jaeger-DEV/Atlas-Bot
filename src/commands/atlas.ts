@@ -1,7 +1,9 @@
-import { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionFlagsBits } from "discord.js";
+import { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { CommandContext } from "../utils/CommandContext.js";
 import { createAtlasEmbed } from "../utils/embedBuilder.js";
 import { config } from "../config.js";
+import { executeRolesCommand } from "./roles.js";
+import { executeAiCommand } from "./ai.js";
 
 export const data = new SlashCommandBuilder()
   .setName("atlas")
@@ -30,6 +32,19 @@ export const data = new SlashCommandBuilder()
   .addSubcommand(sub =>
     sub.setName("stats")
       .setDescription("View repository statistics and health metrics")
+  )
+  .addSubcommand(sub =>
+    sub.setName("roles")
+      .setDescription("Self-assign tech stack and community roles")
+  )
+  .addSubcommand(sub =>
+    sub.setName("ask")
+      .setDescription("Ask Atlas AI a coding or IDE question")
+      .addStringOption(opt =>
+        opt.setName("prompt")
+          .setDescription("Your question or prompt")
+          .setRequired(true)
+      )
   )
   .addSubcommand(sub =>
     sub.setName("setup")
@@ -114,6 +129,10 @@ export async function execute(ctx: CommandContext) {
       `[Explore Source Code](${config.githubUrl})`
     );
     await ctx.reply({ embeds: [embed] });
+  } else if (subcommand === "roles") {
+    await executeRolesCommand(ctx);
+  } else if (subcommand === "ask" || subcommand === "ai") {
+    await executeAiCommand(ctx);
   } else if (subcommand === "setup") {
     if (!ctx.guild) {
       await ctx.reply({ content: "This command can only be executed within the Atlas Studio Discord Server." });

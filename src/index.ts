@@ -1,6 +1,8 @@
 import { Client, GatewayIntentBits, Events } from "discord.js";
 import { config } from "./config.js";
 import { execute as executeAtlasCommand } from "./commands/atlas.js";
+import { executeRolesCommand, handleRoleButton } from "./commands/roles.js";
+import { executeAiCommand } from "./commands/ai.js";
 import { CommandContext } from "./utils/CommandContext.js";
 import { handleGuildMemberAdd } from "./events/guildMemberAdd.js";
 
@@ -20,8 +22,17 @@ client.once(Events.ClientReady, (c) => {
   client.user?.setActivity("Atlas Studio IDE v1.0.0 (A!help)", { type: 0 });
 });
 
-// Slash Commands Handler
+// Interaction Handler (Slash commands & Buttons)
 client.on(Events.InteractionCreate, async (interaction) => {
+  if (interaction.isButton()) {
+    try {
+      await handleRoleButton(interaction);
+    } catch (error) {
+      console.error("[ERROR] Button interaction failed:", error);
+    }
+    return;
+  }
+
   if (!interaction.isChatInputCommand()) return;
 
   if (interaction.commandName === "atlas") {
@@ -47,7 +58,6 @@ client.on(Events.MessageCreate, async (message) => {
   const matchedPrefix = PREFIXES.find(p => content.startsWith(p));
   if (!matchedPrefix) return;
 
-  // Remove prefix and split arguments
   const rawWithoutPrefix = content.slice(matchedPrefix.length).trim();
   if (!rawWithoutPrefix) return;
 
@@ -59,10 +69,15 @@ client.on(Events.MessageCreate, async (message) => {
     if (commandName === "atlas") {
       const ctx = new CommandContext({ message, args });
       await executeAtlasCommand(ctx);
-    } else if (["info", "docs", "doctor", "release", "stats"].includes(commandName)) {
-      // Alias shortcuts: e.g. A!info, a!docs, A!doctor, a!release, A!stats
+    } else if (["info", "docs", "doctor", "release", "stats", "setup"].includes(commandName)) {
       const ctx = new CommandContext({ message, args: [commandName, ...args] });
       await executeAtlasCommand(ctx);
+    } else if (commandName === "roles") {
+      const ctx = new CommandContext({ message, args });
+      await executeRolesCommand(ctx);
+    } else if (["ask", "ai"].includes(commandName)) {
+      const ctx = new CommandContext({ message, args });
+      await executeAiCommand(ctx);
     } else if (commandName === "help") {
       const ctx = new CommandContext({ message, args: ["info"] });
       await executeAtlasCommand(ctx);
