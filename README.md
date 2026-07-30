@@ -44,3 +44,8 @@ pnpm run dev
 pnpm run build
 pnpm start
 ```
+
+## Legal & Compliance
+- 📄 [Terms of Service](TERMS.md)
+- 🔒 [Privacy Policy](PRIVACY.md)
+
