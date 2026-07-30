@@ -1,51 +1,21 @@
-# Atlas Discord Community Bot
+# Atlas Discord Bot
 
-Official Discord Bot for the **Atlas Studio IDE** community server.
+Official private server bot for the **Atlas Studio Discord Community Server**, hosted and managed by the core team.
 
-## Features
-- 🚀 `/atlas info`: Interactive overview of Atlas Studio IDE with GitHub links.
-- 📖 `/atlas docs <topic>`: Architecture & setup documentation search directly in Discord.
-- 🩺 `/atlas doctor`: Instant troubleshooter for setup, Node, pnpm & Electron build issues.
+## Overview
+This bot provides internal server automations, slash command utilities, documentation search, and environment diagnostics for members of the Atlas Studio community.
+
+## Commands
+- 🚀 `/atlas info`: Interactive overview of Atlas Studio IDE with official links.
+- 📖 `/atlas docs [topic]`: Search internal architecture & setup documentation directly in Discord.
+- 🩺 `/atlas doctor`: Environment troubleshooter for Node.js, pnpm & Electron build issues.
 - 📦 `/atlas release`: Latest release details and download links.
-- 👋 **Welcome System**: Dark-themed welcome embeds for new server members.
+- 👋 **Welcome System**: Automatic welcome embeds in `#welcome` for new members.
 
-## Setup Instructions
+## Hosting & Architecture
+- **Infrastructure:** Hosted 24/7 on private AWS instance (`jack-aws`) via PM2 (`atlas-bot`).
+- **Framework:** Node.js, TypeScript, Discord.js v14.
 
-### 1. Installation
-```bash
-cd "/home/victor/My projects/atlas-bot"
-pnpm install
-```
-
-### 2. Configure Environment
-Copy `.env.example` to `.env` and fill in your Discord Bot credentials:
-```bash
-cp .env.example .env
-```
-Edit `.env`:
-```env
-DISCORD_TOKEN=your_bot_token_from_discord_developer_portal
-CLIENT_ID=your_application_client_id
-GUILD_ID=your_discord_server_id
-WELCOME_CHANNEL_ID=your_welcome_channel_id
-```
-
-### 3. Register Slash Commands
-```bash
-pnpm run register
-```
-
-### 4. Run the Bot
-```bash
-# Development (with hot-reload)
-pnpm run dev
-
-# Production
-pnpm run build
-pnpm start
-```
-
-## Legal & Compliance
+## Legal & Policies
 - 📄 [Terms of Service](TERMS.md)
 - 🔒 [Privacy Policy](PRIVACY.md)
-

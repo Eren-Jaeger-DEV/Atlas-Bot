@@ -2,56 +2,24 @@
 
 **Last Updated:** July 30, 2026
 
-Your privacy is extremely important to us. This Privacy Policy outlines how **Atlas Discord Bot** ("the Bot") handles data and protects your privacy when you interact with it on Discord.
+This Privacy Policy explains how **Atlas Discord Bot** handles data within the official **Atlas Studio Discord Community Server**.
 
 ---
 
-### 1. Information We Collect & Process
-
-The Bot is designed with a **privacy-first architecture**. We collect the absolute minimum data required for its core functionality:
-
-#### Transient Data (Not Saved):
-- **Command Interactions**: When you run slash commands like `/atlas docs` or `/atlas doctor`, the input options (e.g. search query) are processed transiently in memory to generate your response embed. They are **never** stored in a database or written to disk.
-- **Server Events**: When a user joins the server, the Bot temporarily receives the user's Discord ID and username to generate a welcome embed in the designated welcome channel.
-
-#### What We DO NOT Collect:
-- ❌ We **do not** read, log, store, or sell user chat messages or private messages.
-- ❌ We **do not** collect personal real names, email addresses, IP addresses, or payment details.
-- ❌ We **do not** track user activity outside of explicit `/atlas` slash command executions.
+### 1. Data Handling & Privacy
+The Bot operates strictly on a **privacy-first, zero-storage** architecture:
+- **Slash Commands**: When members run `/atlas` commands, parameters are processed in-memory to generate response embeds and are never written to disk or stored in any database.
+- **Welcome Embeds**: User IDs and tags are used in-memory solely to render welcome embeds when new members join the server.
+- **No Chat Logging**: The Bot does not record, log, or track chat messages, user conversations, or member behavior.
 
 ---
 
-### 2. How We Use Data
-Collected transient data is used solely to:
-- Respond to slash command requests (`/atlas info`, `/atlas docs`, `/atlas doctor`, `/atlas release`).
-- Send welcome announcements for new members joining the server.
+### 2. Infrastructure & Security
+- The Bot runs on official private AWS infrastructure (`jack-aws`).
+- All bot credentials and tokens are secured in environment variables and are never committed to public repositories.
 
 ---
 
-### 3. Data Storage & Retention
-- **Zero Persistent User Database**: The Bot does not operate a database of user profiles, message logs, or behavioral analytics.
-- **Memory Retention**: All command interaction objects are garbage-collected immediately after replying.
-
----
-
-### 4. Third-Party Services
-The Bot interacts with the following official APIs:
-- **Discord API**: For receiving event payloads and sending message embeds. (Subject to [Discord's Privacy Policy](https://discord.com/privacy)).
-- **GitHub API**: For retrieving public release metadata and documentation pages. (Subject to [GitHub's Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement)).
-
----
-
-### 5. Security & Credentials
-- All API tokens and credentials are encrypted and stored in secure environment variables (`.env`) on the hosting server.
-- Credentials are never committed to open-source public repositories.
-
----
-
-### 6. User Rights & Data Removal
-Because the Bot does not persistently store user data, there is no personal data footprint to delete. If you wish to remove the Bot from a server, server administrators can kick or ban the Bot at any time.
-
----
-
-### 7. Updates & Contact
-We may update this Privacy Policy periodically. For questions regarding privacy:
-- **GitHub Repository:** [https://github.com/Eren-Jaeger-DEV/Atlas-Bot](https://github.com/Eren-Jaeger-DEV/Atlas-Bot)
+### 3. Contact
+For questions regarding the community server or bot privacy:
+- **Atlas Studio Repository:** [https://github.com/Eren-Jaeger-DEV/Atlas](https://github.com/Eren-Jaeger-DEV/Atlas)
