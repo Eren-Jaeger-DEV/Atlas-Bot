@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
+import { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionFlagsBits } from "discord.js";
 import { CommandContext } from "../utils/CommandContext.js";
 import { createAtlasEmbed } from "../utils/embedBuilder.js";
 import { config } from "../config.js";
@@ -30,6 +30,10 @@ export const data = new SlashCommandBuilder()
   .addSubcommand(sub =>
     sub.setName("stats")
       .setDescription("View repository statistics and health metrics")
+  )
+  .addSubcommand(sub =>
+    sub.setName("setup")
+      .setDescription("Initialize server channel embeds (#rules, #about-us) [Admin Only]")
   );
 
 export async function execute(ctx: CommandContext) {
@@ -83,7 +87,7 @@ export async function execute(ctx: CommandContext) {
       "2️⃣ **pnpm**: pnpm `v9.x` required (`pnpm -v`)\n" +
       "3️⃣ **Port Bindings**: Dev server uses port `5173`. Clear port locks with `killall node` if Vite fails to start.\n" +
       "4️⃣ **TypeScript Build**: Build core packages first using `pnpm --filter \"@atlas/core\" --filter \"@atlas/agents\" build`.\n\n" +
-      "Need more help? Ask in <#help-and-support> or open a GitHub issue!"
+      "Need more help? Ask in <#1531390768130953286> or open a GitHub issue!"
     );
     await ctx.reply({ embeds: [embed] });
   } else if (subcommand === "release") {
@@ -110,6 +114,50 @@ export async function execute(ctx: CommandContext) {
       `[Explore Source Code](${config.githubUrl})`
     );
     await ctx.reply({ embeds: [embed] });
+  } else if (subcommand === "setup") {
+    if (!ctx.guild) {
+      await ctx.reply({ content: "This command can only be executed within the Atlas Studio Discord Server." });
+      return;
+    }
+
+    await ctx.deferReply(true);
+
+    try {
+      // Setup #rules channel
+      const rulesChannel = ctx.guild.channels.cache.get(config.channels.rules);
+      if (rulesChannel && rulesChannel.isTextBased()) {
+        const rulesEmbed = createAtlasEmbed(
+          "📜 Atlas Studio Community Rules & Guidelines",
+          "Welcome to the official **Atlas Studio** Discord server! Please adhere to our community guidelines to keep discussions constructive and welcoming.\n\n" +
+          "1️⃣ **Be Respectful & Professional**: No harassment, hate speech, or toxic behavior.\n" +
+          "2️⃣ **Keep Channels Focused**: Use designated channels (<#1531386185434267749> for chat, <#1531390768130953286> for help, <#1531390649696260298> for bugs).\n" +
+          "3️⃣ **No Spam or Unauthorized Ads**: Self-promotion belongs in <#1531394730137620591> for verified plugins.\n" +
+          "4️⃣ **Security & Privacy**: Never post API keys, secret tokens, or personal credentials in chat.\n" +
+          "5️⃣ **Bot Commands**: Use <#1531400738058539209> when running `A!` prefix or `/atlas` commands."
+        );
+        await rulesChannel.send({ embeds: [rulesEmbed] });
+      }
+
+      // Setup #about-us channel
+      const aboutChannel = ctx.guild.channels.cache.get(config.channels.aboutUs);
+      if (aboutChannel && aboutChannel.isTextBased()) {
+        const aboutEmbed = createAtlasEmbed(
+          "🌐 About Atlas Studio",
+          "**Atlas Studio** is a high-performance independent desktop IDE engineered for complex software architecture.\n\n" +
+          "**Core Design System:**\n" +
+          "• **Local-First**: 100% offline-ready core with zero vendor lock-in.\n" +
+          "• **Multi-Agent Orchestrator**: Concurrent sub-agent task breakdown and self-healing error repair.\n" +
+          "• **Atlas Forge**: Plugin ecosystem supporting sandboxed CJS/ESM modules.\n" +
+          "• **Atlascord**: Real-time Discord Rich Presence extension.\n\n" +
+          `[GitHub Repository](${config.githubUrl}) • [Releases](${config.githubUrl}/releases)`
+        );
+        await aboutChannel.send({ embeds: [aboutEmbed] });
+      }
+
+      await ctx.reply({ content: "Successfully populated `#rules` and `#about-us` channels!" });
+    } catch (err: any) {
+      await ctx.reply({ content: `Failed to populate channels: ${err.message}` });
+    }
   } else {
     await ctx.reply({ content: `Unknown subcommand \`${subcommand}\`. Try \`A!atlas info\` or \`A!atlas docs\`.` });
   }
