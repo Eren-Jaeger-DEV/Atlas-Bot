@@ -15,7 +15,7 @@ The Bot operates strictly on a **privacy-first, zero-storage** architecture:
 ---
 
 ### 2. Infrastructure & Security
-- The Bot runs on official private AWS infrastructure (`jack-aws`).
+- The Bot runs on official private cloud infrastructure.
 - All bot credentials and tokens are secured in environment variables and are never committed to public repositories.
 
 ---

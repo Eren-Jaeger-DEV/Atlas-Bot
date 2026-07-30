@@ -13,7 +13,7 @@ This bot provides internal server automations, slash command utilities, document
 - 👋 **Welcome System**: Automatic welcome embeds in `#welcome` for new members.
 
 ## Hosting & Architecture
-- **Infrastructure:** Hosted 24/7 on private AWS instance (`jack-aws`) via PM2 (`atlas-bot`).
+- **Infrastructure:** Hosted 24/7 on private cloud server via PM2.
 - **Framework:** Node.js, TypeScript, Discord.js v14.
 
 ## Legal & Policies
