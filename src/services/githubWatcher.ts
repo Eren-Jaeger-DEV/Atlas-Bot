@@ -103,7 +103,7 @@ async function checkCommits(client: Client) {
         const commitMsg = commit.commit.message.split("\n")[0]; // First line
 
         const embed = createAtlasEmbed(
-          `🛠️ New Commit on Atlas Studio (\`main\`)`,
+          `[COMMIT] New Commit on Atlas Studio (main)`,
           `**Commit:** [\`${shortSha}\`](${commit.html_url})\n` +
           `**Author:** [${authorName}](https://github.com/${authorName})\n` +
           `**Message:** ${commitMsg}\n\n` +
@@ -155,18 +155,35 @@ async function checkReleases(client: Client) {
     const announceChannel = client.channels.cache.get(config.channels.announcements) as TextChannel;
 
     let bodyText = latestRelease.body || "No changelog details provided.";
-    if (bodyText.length > 2000) {
-      bodyText = bodyText.substring(0, 2000) + "\n...[Truncated]";
+    if (bodyText.length > 1200) {
+      bodyText = bodyText.substring(0, 1200) + "\n...[Truncated]";
     }
 
+    const releaseUrl = latestRelease.html_url;
+
     const embed = createAtlasEmbed(
-      `🎉 New Release Published: ${latestRelease.name || latestRelease.tag_name}`,
-      `**Tag:** \`${latestRelease.tag_name}\`\n\n` +
-      `**Changelog & Highlights:**\n${bodyText}\n\n` +
-      `[Download Release Assets & Installer](${latestRelease.html_url})`
+      `[RELEASE] Atlas Studio ${latestRelease.name || latestRelease.tag_name} Published!`,
+      `**Version Tag:** \`${latestRelease.tag_name}\`\n\n` +
+      `**[DOWNLOAD INSTALLERS & BINARIES]**\n` +
+      `• **Windows 10/11 (.exe)**: [Download Installer](${releaseUrl})\n` +
+      `• **Linux (.deb)**: [Download Package](${releaseUrl})\n` +
+      `• **Linux (.AppImage)**: [Download Universal AppImage](${releaseUrl})\n` +
+      `• **macOS (.dmg)**: [Download Apple Package](${releaseUrl})\n\n` +
+      `**[RELEASE HIGHLIGHTS & CHANGELOG]**\n` +
+      `${bodyText}\n\n` +
+      `**[QUICKSTART & USE CASES]**\n` +
+      `• **High-Speed IDE Core**: Zero-AI editor core with instant boot (<10ms paint).\n` +
+      `• **AI Assistant Integration**: Powered by Google Antigravity & AI Agent runtime.\n` +
+      `• **Plugin Ecosystem**: Native Atlas Forge extensions & Monaco LSP isolation.\n\n` +
+      `**[COMMUNITY & SUPPORT CHANNELS]**\n` +
+      `• **Report Bugs & Issues**: <#${config.channels.bugReport}>\n` +
+      `• **Get Help & Support**: <#${config.channels.help}>\n` +
+      `• **Share Feedback & Chat**: <#${config.channels.general}>\n` +
+      `• **Plugin Showcase**: <#${config.channels.pluginShowcase}>\n\n` +
+      `[View Official GitHub Release & Source Code](${releaseUrl})`
     );
 
-    if (changelogChannel) await changelogChannel.send({ content: `@everyone New Atlas Studio release is out!`, embeds: [embed] });
+    if (changelogChannel) await changelogChannel.send({ content: `@everyone New Atlas Studio release is live! Download links below:`, embeds: [embed] });
     if (announceChannel) await announceChannel.send({ embeds: [embed] });
   }
 }
