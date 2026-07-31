@@ -3,6 +3,8 @@ import { config } from "./config.js";
 import { execute as executeAtlasCommand } from "./commands/atlas.js";
 import { executeRolesCommand, handleRoleButton } from "./commands/roles.js";
 import { executeAiCommand } from "./commands/ai.js";
+import { executeGithubCommand } from "./commands/githubCommand.js";
+import { startGitHubWatcher } from "./services/githubWatcher.js";
 import { CommandContext } from "./utils/CommandContext.js";
 import { handleGuildMemberAdd } from "./events/guildMemberAdd.js";
 
@@ -20,6 +22,9 @@ const PREFIXES = ["A!", "a!"];
 client.once(Events.ClientReady, (c) => {
   console.log(`[PASS] Atlas Discord Bot is online and logged in as ${c.user.tag}!`);
   client.user?.setActivity("Atlas Studio IDE v1.0.0 (A!help)", { type: 0 });
+  
+  // Start background live GitHub commit and release poller
+  startGitHubWatcher(client, 60_000);
 });
 
 // Interaction Handler (Slash commands & Buttons)
@@ -78,6 +83,9 @@ client.on(Events.MessageCreate, async (message) => {
     } else if (["ask", "ai"].includes(commandName)) {
       const ctx = new CommandContext({ message, args });
       await executeAiCommand(ctx);
+    } else if (["github", "commits", "changes"].includes(commandName)) {
+      const ctx = new CommandContext({ message, args });
+      await executeGithubCommand(ctx);
     } else if (commandName === "help") {
       const ctx = new CommandContext({ message, args: ["info"] });
       await executeAtlasCommand(ctx);
