@@ -34,6 +34,14 @@ export const data = new SlashCommandBuilder()
       .setDescription("View repository statistics and health metrics")
   )
   .addSubcommand(sub =>
+    sub.setName("workflow")
+      .setDescription("View custom agent workflow DAG configurations")
+  )
+  .addSubcommand(sub =>
+    sub.setName("remote")
+      .setDescription("View Atlas Remote phone control pairing instructions")
+  )
+  .addSubcommand(sub =>
     sub.setName("roles")
       .setDescription("Self-assign tech stack and community roles")
   )
@@ -56,14 +64,14 @@ export async function execute(ctx: CommandContext) {
 
   if (subcommand === "info") {
     const embed = createAtlasEmbed(
-      "🚀 Atlas Studio IDE — v1.0.0 General Availability",
+      "Atlas Studio IDE — v1.0.0 General Availability",
       "**Atlas Studio** is a developer-first independent IDE platform built with Electron, Vite, TypeScript, and a multi-agent AI orchestration architecture.\n\n" +
       "**Key Features:**\n" +
-      "• 🧠 **Parallel Agent Orchestrator**: Concurrent multi-agent execution & routing\n" +
-      "• ⚡ **Atlascord Presence Engine**: 100% real-time custom Discord Rich Presence\n" +
-      "• 🧩 **Atlas Forge Plugin System**: Sandboxed CommonJS/ESM plugin ecosystem\n" +
-      "• 🔍 **AST Knowledge Graph**: SQLite symbol indexing & code health metrics\n" +
-      "• 🎨 **Stealth Dark Theme**: Obsidian slate visual design system\n\n" +
+      "• [AGENT] **Parallel Agent Orchestrator**: Concurrent multi-agent execution & routing\n" +
+      "• [PRESENCE] **Atlascord Presence Engine**: 100% real-time custom Discord Rich Presence\n" +
+      "• [FORGE] **Atlas Forge Plugin System**: Sandboxed CJS/ESM plugin ecosystem\n" +
+      "• [GRAPH] **AST Knowledge Graph**: SQLite symbol indexing & code health metrics\n" +
+      "• [THEME] **Stealth Dark Theme**: Obsidian slate visual design system\n\n" +
       "[GitHub Repository](https://github.com/Eren-Jaeger-DEV/Atlas) • [Documentation](https://github.com/Eren-Jaeger-DEV/Atlas#readme)"
     );
 
@@ -92,22 +100,45 @@ export async function execute(ctx: CommandContext) {
         "• [Monorepo Package Structure](https://github.com/Eren-Jaeger-DEV/Atlas#repository-structure)\n\n";
     }
 
-    const embed = createAtlasEmbed("📖 Atlas Studio Docs", text);
+    const embed = createAtlasEmbed("Atlas Studio Docs", text);
+    await ctx.reply({ embeds: [embed] });
+  } else if (subcommand === "workflow") {
+    const embed = createAtlasEmbed(
+      "[WORKFLOW] Atlas Custom Agent Workflow DAG Builder",
+      "Atlas Studio supports user-defined custom agent workflows saved directly in your workspace repository under `.atlas/workflows/*.json`.\n\n" +
+      "**Workflow DAG Stages:**\n" +
+      "1. `[PLAN]` **Architecture Planner**: Analyzes codebase context and generates task DAG\n" +
+      "2. `[CODE]` **Implementation Coder**: Applies automated code patches with AST safety checks\n" +
+      "3. `[TEST]` **Verification Tester**: Executes test suites and validates build state\n" +
+      "4. `[REVIEW]` **Risk Reviewer**: Evaluates diff security and code conventions\n\n" +
+      "Use the interactive **Workflow Editor** in Atlas Studio (`Ctrl+Shift+P` > `Open Workflow Editor`) to design custom pipelines."
+    );
+    await ctx.reply({ embeds: [embed] });
+  } else if (subcommand === "remote") {
+    const embed = createAtlasEmbed(
+      "[REMOTE] Atlas Remote Control Gateway",
+      "Control your Atlas Studio IDE session from your mobile device via local HTTP/WebSocket connection.\n\n" +
+      "**Pairing Steps:**\n" +
+      "1️⃣ Enable **Atlas Remote** in Settings (`settings.enableRemoteControl: true`)\n" +
+      "2️⃣ Open the control endpoint on your phone browser: `http://<your-ip>:4000?token=<auth-token>`\n" +
+      "3️⃣ Monitor agent runs, view test results, and approve file edits remotely in real time.\n\n" +
+      "Security: Auth tokens are encrypted using OS `safeStorage` and remain valid across app restarts."
+    );
     await ctx.reply({ embeds: [embed] });
   } else if (subcommand === "doctor") {
     const embed = createAtlasEmbed(
-      "🩺 Atlas Doctor — Troubleshooter",
+      "Atlas Doctor — Troubleshooter",
       "**Common Setup Checklist:**\n\n" +
-      "1️⃣ **Node Version**: Node.js `v20.x` or higher required (`node -v`)\n" +
-      "2️⃣ **pnpm**: pnpm `v9.x` required (`pnpm -v`)\n" +
-      "3️⃣ **Port Bindings**: Dev server uses port `5173`. Clear port locks with `killall node` if Vite fails to start.\n" +
-      "4️⃣ **TypeScript Build**: Build core packages first using `pnpm --filter \"@atlas/core\" --filter \"@atlas/agents\" build`.\n\n" +
+      "1. **Node Version**: Node.js `v20.x` or higher required (`node -v`)\n" +
+      "2. **pnpm**: pnpm `v9.x` required (`pnpm -v`)\n" +
+      "3. **Port Bindings**: Dev server uses port `5173`. Clear port locks with `killall node` if Vite fails to start.\n" +
+      "4. **TypeScript Build**: Build core packages first using `pnpm --filter \"@atlas/core\" --filter \"@atlas/agents\" build`.\n\n" +
       "Need more help? Ask in <#1531390768130953286> or open a GitHub issue!"
     );
     await ctx.reply({ embeds: [embed] });
   } else if (subcommand === "release") {
     const embed = createAtlasEmbed(
-      "📦 Atlas Studio v1.0.0 Release",
+      "Atlas Studio v1.0.0 Release",
       "**Version:** v1.0.0 GA\n" +
       "**Status:** Production Ready\n\n" +
       "**Highlights:**\n" +
@@ -120,7 +151,7 @@ export async function execute(ctx: CommandContext) {
     await ctx.reply({ embeds: [embed] });
   } else if (subcommand === "stats") {
     const embed = createAtlasEmbed(
-      "📊 Atlas Studio Repository Health",
+      "Atlas Studio Repository Health",
       "**Repository Info:**\n" +
       "• **Owner:** Eren-Jaeger-DEV\n" +
       "• **Monorepo Packages:** `@atlas/core`, `@atlas/sdk`, `@atlas/agents`, `@atlas/graph`, `@atlas/parser`, `@atlas/editor`, `@atlas/cli`\n" +
@@ -146,13 +177,13 @@ export async function execute(ctx: CommandContext) {
       const rulesChannel = ctx.guild.channels.cache.get(config.channels.rules);
       if (rulesChannel && rulesChannel.isTextBased()) {
         const rulesEmbed = createAtlasEmbed(
-          "📜 Atlas Studio Community Rules & Guidelines",
+          "Atlas Studio Community Rules & Guidelines",
           "Welcome to the official **Atlas Studio** Discord server! Please adhere to our community guidelines to keep discussions constructive and welcoming.\n\n" +
-          "1️⃣ **Be Respectful & Professional**: No harassment, hate speech, or toxic behavior.\n" +
-          "2️⃣ **Keep Channels Focused**: Use designated channels (<#1531386185434267749> for chat, <#1531390768130953286> for help, <#1531390649696260298> for bugs).\n" +
-          "3️⃣ **No Spam or Unauthorized Ads**: Self-promotion belongs in <#1531394730137620591> for verified plugins.\n" +
-          "4️⃣ **Security & Privacy**: Never post API keys, secret tokens, or personal credentials in chat.\n" +
-          "5️⃣ **Bot Commands**: Use <#1531400738058539209> when running `A!` prefix or `/atlas` commands."
+          "1. **Be Respectful & Professional**: No harassment, hate speech, or toxic behavior.\n" +
+          "2. **Keep Channels Focused**: Use designated channels (<#1531386185434267749> for chat, <#1531390768130953286> for help, <#1531390649696260298> for bugs).\n" +
+          "3. **No Spam or Unauthorized Ads**: Self-promotion belongs in <#1531394730137620591> for verified plugins.\n" +
+          "4. **Security & Privacy**: Never post API keys, secret tokens, or personal credentials in chat.\n" +
+          "5. **Bot Commands**: Use <#1531400738058539209> when running `A!` or `a!` prefix commands or `/atlas` commands."
         );
         await rulesChannel.send({ embeds: [rulesEmbed] });
       }
@@ -161,7 +192,7 @@ export async function execute(ctx: CommandContext) {
       const aboutChannel = ctx.guild.channels.cache.get(config.channels.aboutUs);
       if (aboutChannel && aboutChannel.isTextBased()) {
         const aboutEmbed = createAtlasEmbed(
-          "🌐 About Atlas Studio",
+          "About Atlas Studio",
           "**Atlas Studio** is a high-performance independent desktop IDE engineered for complex software architecture.\n\n" +
           "**Core Design System:**\n" +
           "• **Local-First**: 100% offline-ready core with zero vendor lock-in.\n" +
